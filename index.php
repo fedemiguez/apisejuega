@@ -43,7 +43,7 @@ $app->get('/usuario', function () use ($app) {
 });
 $app->post('/usuario', function () use ($app) {
 	$input = $app->request->getBody();
-	$name = $input['name'];
+	$name = $input'name';
 	if(empty($name)){
 		$app->render(500,array(
 			'error' => TRUE,
