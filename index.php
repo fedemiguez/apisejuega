@@ -132,58 +132,76 @@ $app->delete('/usuario/:id', function ($id) use ($app) {
 
 $app->get('/partidos', function () use ($app) {
 	$db = $app->db->getConnection();
-	$users = $db->table('partidos')->select('id', 'nombre', 'fecha')->get();
+	$users = $db->table('partidos')->select('id', 'nombre', 'fecha', 'participantes')->get();
 
 	$app->render(200,array('data' => $users));
 });
 
-$app->post('/partidos', function () use ($app) {
-
-
-    $user = new Partido();
-    $user->nombre = $app->request->params('nombre');
-    $user->fecha = $app->request->params('fecha');
-    $user->participantes = $app->request->params('participantes');
-    $user->id_usuario = $app->request->params('id_usuario');
-    $user->save();
-
-    $app->render(200,array('data' => $user->toArray()));
-});
-
-$app->put('/partido/:id', function ($id) use ($app) {
-	$name = $app->request->params('nombre');
+$a$app->post('/partidos', function () use ($app) {
+	$input = $app->request->getBody();
+	$name = $input['nombre'];
 	if(empty($name)){
 		$app->render(500,array(
 			'error' => TRUE,
             'msg'   => 'name is required',
         ));
 	}
-	$password = $app->request->params('fecha');
-	if(empty($password)){
+	$fecha = $input['fecha'];
+	if(empty($fecha)){
 		$app->render(500,array(
 			'error' => TRUE,
             'msg'   => 'password is required',
         ));
 	}
-	$email = $app->request->params('participantes');
+	$participantes = $input['participantes'];
+	if(empty($participantes)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'email is required',
+        ));
+	}
+    $user = new User();
+    $user->name = $name;
+    $user->fecha = $fecha;
+    $user->participantes = $participantes;
+    $user->save();
+    $app->render(200,array('data' => $user->toArray()));
+});
+
+$app->put('/partidos/:id', function ($id) use ($app) {
+	$input = $app->request->getBody();
+	
+	$name = $input['nombre'];
+	if(empty($name)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'name is required',
+        ));
+	}
+	$fecha = $input['fecha'];
+	if(empty($fecha)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'password is required',
+        ));
+	}
+	$participantes = $input['participantes'];
 	if(empty($email)){
 		$app->render(500,array(
 			'error' => TRUE,
             'msg'   => 'email is required',
         ));
 	}
-
-	$user = Partido::find($id);
+	$user = User::find($id);
 	if(empty($user)){
 		$app->render(404,array(
 			'error' => TRUE,
             'msg'   => 'user not found',
         ));
 	}
-  $user->nombre = $app->request->params('nombre');
-  $user->fecha = $app->request->params('fecha');
-  $user->participantes = $app->request->params('participantes');
-  $user->id_usuario = $app->request->params('id_usuario');
+    $user->nombre = $name;
+    $user->fecha = $fecha;
+    $user->participantes = $participantes;
     $user->save();
     $app->render(200,array('data' => $user->toArray()));
 });
