@@ -189,7 +189,7 @@ $app->put('/partidos/:id', function ($id) use ($app) {
         ));
 	}
 	$participantes = $input['participantes'];
-	if(empty($email)){
+	if(empty($participantes)){
 		$app->render(500,array(
 			'error' => TRUE,
             'msg'   => 'email is required',
@@ -210,7 +210,7 @@ $app->put('/partidos/:id', function ($id) use ($app) {
 });
 
 //ver partido Id
-$app->get('/partido/:id', function ($id) use ($app) {
+$app->get('/partidos/:id', function ($id) use ($app) {
 	$user = Partido::find($id);
 	if(empty($user)){
 		$app->render(404,array(
@@ -221,7 +221,7 @@ $app->get('/partido/:id', function ($id) use ($app) {
 	$app->render(200,array('data' => $user->toArray()));
 });
 
-$app->delete('/partido/:id', function ($id) use ($app) {
+$app->delete('/partidos/:id', function ($id) use ($app) {
 	$user = Partido::find($id);
 	if(empty($user)){
 		$app->render(404,array(
