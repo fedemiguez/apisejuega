@@ -129,7 +129,7 @@ $app->delete('/usuario/:id', function ($id) use ($app) {
 	$user->delete();
 	$app->render(200);
 });
-
+//ver Partidos
 $app->get('/partidos', function () use ($app) {
 	$db = $app->db->getConnection();
 	$users = $db->table('partidos')->select('id', 'nombre', 'fecha', 'participantes')->get();
@@ -137,7 +137,8 @@ $app->get('/partidos', function () use ($app) {
 	$app->render(200,array('data' => $users));
 });
 
-$a$app->post('/partidos', function () use ($app) {
+//Crear Partidos
+$app->post('/partidos', function () use ($app) {
 	$input = $app->request->getBody();
 	$name = $input['nombre'];
 	if(empty($name)){
@@ -160,13 +161,15 @@ $a$app->post('/partidos', function () use ($app) {
             'msg'   => 'email is required',
         ));
 	}
-    $user = new User();
+    $user = new Partido();
     $user->name = $name;
     $user->fecha = $fecha;
     $user->participantes = $participantes;
     $user->save();
     $app->render(200,array('data' => $user->toArray()));
 });
+
+//Modificar Partido 
 
 $app->put('/partidos/:id', function ($id) use ($app) {
 	$input = $app->request->getBody();
@@ -192,7 +195,7 @@ $app->put('/partidos/:id', function ($id) use ($app) {
             'msg'   => 'email is required',
         ));
 	}
-	$user = User::find($id);
+	$user = Partido::find($id);
 	if(empty($user)){
 		$app->render(404,array(
 			'error' => TRUE,
@@ -206,6 +209,7 @@ $app->put('/partidos/:id', function ($id) use ($app) {
     $app->render(200,array('data' => $user->toArray()));
 });
 
+//ver partido Id
 $app->get('/partido/:id', function ($id) use ($app) {
 	$user = Partido::find($id);
 	if(empty($user)){
