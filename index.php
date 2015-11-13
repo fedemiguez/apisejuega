@@ -219,7 +219,7 @@ $app->post('/partidos', function () use ($app) {
             'msg'   => 'password is required',
         ));
 	}
-	$participantes = $input['invitados'];
+	$participantes = $input['participantes'];
 	if(empty($participantes)){
 		$app->render(500,array(
 			'error' => TRUE,
@@ -229,7 +229,7 @@ $app->post('/partidos', function () use ($app) {
     $user = new Partido();
     $user->nombre = $name;
     $user->fecha = $fecha;
-    $user->invitados = $participantes;
+    $user->participantes = $participantes;
     $user->save();
     $app->render(200,array('data' => $user->toArray()));
 });
