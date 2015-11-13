@@ -167,6 +167,12 @@ $app->post('/login', function () use ($app) {
 	$app->render(200,array());
 });
 
+//logout
+$app->get('/logout', function() use($app) {
+    session_destroy();
+    $app->redirect('/');
+});
+
 //perfil
 $app->get('/me', function () use ($app) {
 	if(empty($_SESSION["user"])){
