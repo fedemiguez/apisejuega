@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 
 ini_set('display_errors',1);
@@ -9,7 +10,6 @@ require 'vendor/autoload.php';
 require 'Models/User.php';
 
 
-session_start();
 
 $app = new \Slim\Slim();
 
@@ -176,14 +176,14 @@ $app->get('/logout', function() use($app) {
 //perfil
 $app->get('/me', function () use ($app) {
 	if(empty($_SESSION["user"])){
-		$app->render(500,array(
+		$app->render(404,array(
 			'error' => TRUE,
             'msg'   => 'Not logged',
         ));
 	}
 	$user = User::find($_SESSION["user"]);
 	if(empty($user)){
-		$app->render(500,array(
+		$app->render(404,array(
 			'error' => TRUE,
             'msg'   => 'Not logged',
         ));
