@@ -170,7 +170,7 @@ $app->post('/login', function () use ($app) {
 //logout
 $app->get('/logout', function() use($app) {
     session_destroy();
-    $app->redirect('/');
+    $_SESSION=$array();
 });
 
 //perfil
