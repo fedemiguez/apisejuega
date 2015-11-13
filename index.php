@@ -129,6 +129,62 @@ $app->delete('/usuario/:id', function ($id) use ($app) {
 	$user->delete();
 	$app->render(200);
 });
+
+//login
+$app->post('/login', function () use ($app) {
+	$input = $app->request->getBody();
+	$email = $input['email'];
+	if(empty($email)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'email is required',
+        ));
+	}
+	$password = $input['password'];
+	if(empty($password)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'password is required',
+        ));
+	}
+	$db = $app->db->getConnection();
+	$user = $db->table('users')->select()->where('email', $email)->first();
+	if(empty($user)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'user not exist',
+        ));
+	}
+	if($user->password != $password){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'password dont match',
+        ));
+	}
+	$_SESSION["user"] = $user->id;
+	$app->render(200,array());
+});
+
+//perfil
+$app->get('/me', function () use ($app) {
+	if(empty($_SESSION["user"])){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'Not logged',
+        ));
+	}
+	$user = User::find($_SESSION["user"]);
+	if(empty($user)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'Not logged',
+        ));
+	}
+	$app->render(200,array('data' => $user->toArray()));
+});
+
+
+
 //ver Partidos
 $app->get('/partidos', function () use ($app) {
 	$db = $app->db->getConnection();
