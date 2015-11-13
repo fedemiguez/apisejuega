@@ -183,7 +183,7 @@ $app->get('/me', function () use ($app) {
 	}
 	$user = User::find($_SESSION["user"]);
 	if(empty($user)){
-		$app->render(404,array(
+		$app->render(500,array(
 			'error' => TRUE,
             'msg'   => 'Not logged',
         ));
