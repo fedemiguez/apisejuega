@@ -176,7 +176,7 @@ $app->get('/logout', function() use($app) {
 //perfil
 $app->get('/me', function () use ($app) {
 	if(empty($_SESSION["user"])){
-		$app->render(404,array(
+		$app->render(500,array(
 			'error' => TRUE,
             'msg'   => 'Not logged',
         ));
@@ -189,6 +189,13 @@ $app->get('/me', function () use ($app) {
         ));
 	}
 	$app->render(200,array('data' => $user->toArray()));
+});
+
+$app->get('/session', function() {
+    $db = new DbHandler();
+    $session = $db->getSession();
+    $response["user"] = $session['user'];
+    echoResponse(200, $session);
 });
 
 
