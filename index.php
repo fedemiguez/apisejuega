@@ -9,6 +9,8 @@ require 'vendor/autoload.php';
 require 'Models/User.php';
 
 
+session_start();
+
 $app = new \Slim\Slim();
 
 $app->config('databases', [
