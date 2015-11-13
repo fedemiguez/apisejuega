@@ -175,7 +175,12 @@ $app->get('/logout', function() use($app) {
 
 //perfil
 $app->get('/me', function () use ($app) {
-
+	if(empty($_SESSION["user"])){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'Not logged',
+        ));
+	}
 	$user = User::find($_SESSION["user"]);
 	if(empty($user)){
 		$app->render(500,array(
