@@ -181,6 +181,8 @@ $app->post('/login', function () use ($app) {
 //logout
 $app->get('/logout', function() use($app) {
  	$token="";
+	$app->render(200,array('token' => $token));
+
 });
 
 //perfil
