@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 
 ini_set('display_errors',1);
@@ -9,9 +8,20 @@ error_reporting(-1);
 require 'vendor/autoload.php';
 require 'Models/User.php';
 
+function simple_encrypt($text,$salt){  
+   return trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $salt, $text, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND))));
+}
+ 
+function simple_decrypt($text,$salt){  
+    return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $salt, base64_decode($text), MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND)));
+}
+
 
 
 $app = new \Slim\Slim();
+
+$app->enc_key = '1234567891011214';
+
 
 $app->config('databases', [
     'default' => [
@@ -163,25 +173,27 @@ $app->post('/login', function () use ($app) {
             'msg'   => 'password dont match',
         ));
 	}
-	$_SESSION["user"] = $user->id;
-	$app->render(200,array());
+
+	$token = simple_encrypt($user->id, $app->enc_key);	
+	$app->render(200,array('token' => $token));
 });
 
 //logout
 $app->get('/logout', function() use($app) {
-    session_destroy();
-    $_SESSION=$array();
+ 	$token="";
 });
 
 //perfil
 $app->get('/me', function () use ($app) {
-	if(empty($_SESSION["user"])){
+	$token = $app->request->headers->get('auth-token');
+	if(empty($token)){
 		$app->render(500,array(
 			'error' => TRUE,
             'msg'   => 'Not logged',
         ));
 	}
-	$user = User::find($_SESSION["user"]);
+	$id_user_token = simple_decrypt($token, $app->enc_key);
+	$user = User::find($id_user_token);
 	if(empty($user)){
 		$app->render(500,array(
 			'error' => TRUE,
