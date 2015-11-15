@@ -238,7 +238,7 @@ $app->get('/mispartidos', function () use ($app) {
 		}
 
 	$db = $app->db->getConnection();
-	$users = $db->table('partidos')->select('id', 'nombre', 'fecha', 'participantes')->where('id_usuario', $user->id )->get();
+	$users = $db->table('partidos')->select('id', 'nombre', 'fecha', 'participantes', 'hora', 'lugar')->where('id_usuario', $user->id )->get();
 
 	$app->render(200,array('data' => $users));
 });
