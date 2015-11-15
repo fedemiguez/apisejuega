@@ -267,10 +267,29 @@ $app->post('/partidos', function () use ($app) {
             'msg'   => 'email is required',
         ));
 	}
+
+	$hora = $input['hora'];
+	if(empty($hora)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'email is required',
+        ));
+	}
+
+		$lugar = $input['lugar'];
+	if(empty($lugar)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'email is required',
+        ));
+	}
+
     $user = new Partido();
     $user->nombre = $name;
     $user->fecha = $fecha;
     $user->participantes = $participantes;
+    $user->hora = $hora;
+    $user->lugar = $lugar;
     $user->save();
     $app->render(200,array('data' => $user->toArray()));
 });
