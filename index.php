@@ -245,6 +245,26 @@ $app->get('/mispartidos', function () use ($app) {
 
 //Crear Partidos
 $app->post('/partidos', function () use ($app) {
+
+	$token = $app->request->headers->get('auth-token');
+	if(empty($token)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'Not logged',
+        ));
+	}
+	$id_user_token = simple_decrypt($token, $app->enc_key);
+	$user = User::find($id_user_token);
+	if(empty($user)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'Not logged',
+        ));
+	}
+
+
+
+
 	$input = $app->request->getBody();
 	$name = $input['nombre'];
 	if(empty($name)){
@@ -284,14 +304,15 @@ $app->post('/partidos', function () use ($app) {
         ));
 	}
 
-    $user = new Partido();
-    $user->nombre = $name;
-    $user->fecha = $fecha;
-    $user->participantes = $participantes;
-    $user->hora = $hora;
-    $user->lugar = $lugar;
-    $user->save();
-    $app->render(200,array('data' => $user->toArray()));
+    $partido = new Partido();
+    $partido->nombre = $name;
+    $partido->id_usuario=$user->id
+    $partido->fecha = $fecha;
+    $partido->participantes = $participantes;
+    $partido->hora = $hora;
+    $partido->lugar = $lugar;
+    $partido->save();
+    $app->render(200,array('data' => $partido->toArray()));
 });
 
 //Modificar Partido 
