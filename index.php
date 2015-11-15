@@ -216,13 +216,7 @@ $app->get('/partidos', function () use ($app) {
 	$app->render(200,array('data' => $users));
 });
 
-//ver Partidos de un id
-$app->get('/partidosid', function () use ($app) {
-	$db = $app->db->getConnection();
-	$partidos = $db->table('partidos')->select('id', 'nombre', 'fecha', 'participantes')->where('id_usuario', $user->id )get();
 
-	$app->render(200,array('data' => $partidos));
-});
 
 //Crear Partidos
 $app->post('/partidos', function () use ($app) {
