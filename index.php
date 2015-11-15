@@ -217,6 +217,15 @@ $app->get('/partidos', function () use ($app) {
 });
 
 
+//ver Partidos de un id
+$app->get('/mispartidos', function () use ($app) {
+
+
+	$db = $app->db->getConnection();
+	$users = $db->table('partidos')->select('id', 'nombre', 'fecha', 'participantes')->where('id_usuario', $user->id )->get();
+
+	$app->render(200,array('data' => $users));
+});
 
 //Crear Partidos
 $app->post('/partidos', function () use ($app) {
