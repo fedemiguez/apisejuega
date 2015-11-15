@@ -304,9 +304,18 @@ $app->post('/partidos', function () use ($app) {
         ));
 	}
 
+
+		$id_usuario = $user->id;
+	if(empty($id_usuario)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'email is required',
+        ));
+	}
+
     $partido = new Partido();
     $partido->nombre = $name;
-    $partido->id_usuario=$user->id
+    $partido->id_usuario=$id_usuario;
     $partido->fecha = $fecha;
     $partido->participantes = $participantes;
     $partido->hora = $hora;
