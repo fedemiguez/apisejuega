@@ -221,6 +221,22 @@ $app->get('/partidos', function () use ($app) {
 $app->get('/mispartidos', function () use ($app) {
 
 
+		$token = $app->request->headers->get('auth-token');
+		if(empty($token)){
+			$app->render(500,array(
+				'error' => TRUE,
+				'msg'   => 'Not logged',
+			));
+		}
+		$id_user_token = simple_decrypt($token, $app->enc_key);
+		$user = User::find($id_user_token);
+		if(empty($user)){
+			$app->render(500,array(
+				'error' => TRUE,
+				'msg'   => 'Not logged',
+			));
+		}
+
 	$db = $app->db->getConnection();
 	$users = $db->table('partidos')->select('id', 'nombre', 'fecha', 'participantes')->where('id_usuario', $user->id )->get();
 
