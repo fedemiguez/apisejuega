@@ -249,7 +249,6 @@ $app->post('/partidos', function () use ($app) {
 	$token = $app->request->headers->get('auth-token');
 	$id_user_token = simple_decrypt($token, $app->enc_key);
 	$user = User::find($id_user_token);
-	$user->toArray()));
 
 
 	$input = $app->request->getBody();
