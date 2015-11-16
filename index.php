@@ -246,6 +246,15 @@ $app->get('/mispartidos', function () use ($app) {
 //Crear Partidos
 $app->post('/partidos', function () use ($app) {
 
+	$id_user_token = simple_decrypt($token, $app->enc_key);
+	$user = User::find($id_user_token);
+	if(empty($user)){
+		$app->render(500,array(
+			'error' => TRUE,
+			'msg'   => 'Not logged',
+		));
+	}
+
 	$input = $app->request->getBody();
 	$name = $input['nombre'];
 	if(empty($name)){
