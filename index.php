@@ -246,16 +246,11 @@ $app->get('/mispartidos', function () use ($app) {
 //Crear Partidos
 $app->post('/partidos', function () use ($app) {
 
-	$token = $app->request->headers->get('auth-token');
-
+	$token = $app->request->headers->post('auth-token');
 	$id_user_token = simple_decrypt($token, $app->enc_key);
 	$user = User::find($id_user_token);
-	if(empty($user)){
-		$app->render(500,array(
-			'error' => TRUE,
-			'msg'   => 'Not logged',
-		));
-	}
+	$app->render(200,array('data' => $user->toArray()));
+
 
 	$input = $app->request->getBody();
 	$name = $input['nombre'];
