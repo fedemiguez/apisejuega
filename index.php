@@ -246,6 +246,8 @@ $app->get('/mispartidos', function () use ($app) {
 //Crear Partidos
 $app->post('/partidos', function () use ($app) {
 
+	$token = $app->request->headers->get('auth-token');
+
 	$id_user_token = simple_decrypt($token, $app->enc_key);
 	$user = User::find($id_user_token);
 	if(empty($user)){
