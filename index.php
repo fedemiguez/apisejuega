@@ -401,7 +401,7 @@ $app->post('/partidos/:id/invitar', function ($id) use ($app) {
         ));
 	}
 	$input = $app->request->getBody();
-	$id = $input['id'];
+	$id = $input['id_u'];
 	if(empty($id)){
 		$app->render(500,array(
 			'error' => TRUE,
