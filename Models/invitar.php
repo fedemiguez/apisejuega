@@ -1,5 +1,5 @@
 <?php
-class invitar extends \Illuminate\Database\Eloquent\Model
+class invitado extends \Illuminate\Database\Eloquent\Model
 {
 
 protected $table = 'invitados';
