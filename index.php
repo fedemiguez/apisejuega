@@ -7,6 +7,9 @@ error_reporting(-1);
 
 require 'vendor/autoload.php';
 require 'Models/User.php';
+require 'Models/partidos.php';
+require 'Models/invitar.php';
+
 
 function simple_encrypt($text,$salt){  
    return trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $salt, $text, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND))));
@@ -266,13 +269,6 @@ $app->post('/partidos', function () use ($app) {
             'msg'   => 'password is required',
         ));
 	}
-	$participantes = $input['participantes'];
-	if(empty($participantes)){
-		$app->render(500,array(
-			'error' => TRUE,
-            'msg'   => 'email is required',
-        ));
-	}
 
 	$hora = $input['hora'];
 	if(empty($hora)){
@@ -303,12 +299,61 @@ $app->post('/partidos', function () use ($app) {
     $partido->nombre = $name;
     $partido->id_usuario=$id_usuario;
     $partido->fecha = $fecha;
-    $partido->participantes = $participantes;
     $partido->hora = $hora;
     $partido->lugar = $lugar;
     $partido->save();
     $app->render(200,array('data' => $partido->toArray()));
 });
+
+
+//invitar
+$app->post('/partidos/:id/invitar', function () use ($app) {
+
+	$token = $app->request->headers->get('auth-token');
+	if(empty($token)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'Not logged',
+        ));
+	}
+	$id_user_token = simple_decrypt($token, $app->enc_key);
+	$user = User::find($id_user_token);
+	if(empty($user)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'Not logged',
+        ));
+	}
+	$db = $app->db->getConnection();
+	$partido = Partido::find($id);
+	if(empty($partido)){
+		$app->render(404,array(
+			'error' => TRUE,
+            'msg'   => 'partido not found',
+        ));
+	}
+	$input = $app->request->getBody();
+	$text = $input['text'];
+	if(empty($text)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'text is required',
+        ));
+	}
+	$text_array = explode(',', $text);
+	$created = array();
+	foreach ($text_array as $key => $text) {
+		$invitar = new invitar();
+		$invitar->id_usuario = $text
+		$invitar->id_partido = $partido->id;
+		$invitar->save();
+		$created[] = $invitar->toArray();
+	}
+	$app->render(200,array('data' => $created));
+});
+});
+
+
 
 //Modificar Partido 
 
