@@ -401,18 +401,18 @@ $app->post('/partidos/:id/invitar', function ($id) use ($app) {
         ));
 	}
 	$input = $app->request->getBody();
-	$text = $input['text'];
-	if(empty($text)){
+	$id = $input['id'];
+	if(empty($id)){
 		$app->render(500,array(
 			'error' => TRUE,
-            'msg'   => 'text is required',
+            'msg'   => 'id is required',
         ));
 	}
-	$text_array = explode(',', $text);
+	$text_array = explode(',', $id);
 	$created = array();
-	foreach ($text_array as $key => $text) {
+	foreach ($text_array as $key => $id) {
 		$comment = new invitado();
-		$comment->id_usuario = $text;
+		$comment->id_usuario = $id;
 		$comment->id_partido = $partido->id;
 		$comment->save();
 		$created[] = $comment->toArray();
