@@ -307,40 +307,6 @@ $app->post('/partidos', function () use ($app) {
 
 
 
-//invitar
-$app->post('/partidos/:id/invitar', function () use ($app) {
-
-	
-	$partido = Partido::find($id);
-	if(empty($partido)){
-		$app->render(404,array(
-			'error' => TRUE,
-            'msg'   => 'partido not found',
-        ));
-	}
-
-	$input = $app->request->getBody();
-	$text = $input['text'];
-	if(empty($text)){
-		$app->render(500,array(
-			'error' => TRUE,
-            'msg'   => 'text is required',
-        ));
-	}
-	
-	$text_array = explode(',', $text);
-
-	$created = array();
-
-	foreach ($text_array as $key => $text) {
-		$invitar = new invitado();
-		$invitar->id_usuario = $text
-		$invitar->id_partido = $partido->id;
-		$invitar->save();
-		$created[] = $invitar->toArray();
-	}
-	$app->render(200,array('data' => $created));
-});
 
 
 //Modificar Partido 
