@@ -311,8 +311,6 @@ $app->post('/partidos', function () use ($app) {
 $app->post('/partidos/:id/invitar', function () use ($app) {
 
 	
-
-	$db = $app->db->getConnection();
 	$partido = Partido::find($id);
 	if(empty($partido)){
 		$app->render(404,array(
