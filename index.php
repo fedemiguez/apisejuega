@@ -374,7 +374,50 @@ $app->delete('/partidos/:id', function ($id) use ($app) {
 	$app->render(200);
 });
 
-
+$app->post('/partidos/:id/invitar', function ($id) use ($app) {
+	$token = $app->request->headers->get('auth-token');
+	if(empty($token)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'Not logged',
+        ));
+	}
+	$id_user_token = simple_decrypt($token, $app->enc_key);
+	$user = User::find($id_user_token);
+	if(empty($user)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'Not logged',
+        ));
+	}
+	$db = $app->db->getConnection();
+	$post = Post::find($id);
+	if(empty($post)){
+		$app->render(404,array(
+			'error' => TRUE,
+            'msg'   => 'post not found',
+        ));
+	}
+	$input = $app->request->getBody();
+	$text = $input['text'];
+	if(empty($text)){
+		$app->render(500,array(
+			'error' => TRUE,
+            'msg'   => 'text is required',
+        ));
+	}
+	$text_array = explode(',', $text);
+	$created = array();
+	foreach ($text_array as $key => $text) {
+		$comment = new Comment();
+		$comment->text = $text;
+		$comment->id_usuario = $user->id;
+		$comment->id_post = $post->id;
+		$comment->save();
+		$created[] = $comment->toArray();
+	}
+	$app->render(200,array('data' => $created));
+});
 
 
 
