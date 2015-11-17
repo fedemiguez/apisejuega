@@ -374,6 +374,8 @@ $app->delete('/partidos/:id', function ($id) use ($app) {
 	$app->render(200);
 });
 
+//invitar
+
 $app->post('/partidos/:id/invitar', function ($id) use ($app) {
 	$token = $app->request->headers->get('auth-token');
 	if(empty($token)){
@@ -391,11 +393,11 @@ $app->post('/partidos/:id/invitar', function ($id) use ($app) {
         ));
 	}
 	$db = $app->db->getConnection();
-	$post = Post::find($id);
-	if(empty($post)){
+	$partido = Partido::find($id);
+	if(empty($partido)){
 		$app->render(404,array(
 			'error' => TRUE,
-            'msg'   => 'post not found',
+            'msg'   => 'partido not found',
         ));
 	}
 	$input = $app->request->getBody();
@@ -409,10 +411,9 @@ $app->post('/partidos/:id/invitar', function ($id) use ($app) {
 	$text_array = explode(',', $text);
 	$created = array();
 	foreach ($text_array as $key => $text) {
-		$comment = new Comment();
-		$comment->text = $text;
-		$comment->id_usuario = $user->id;
-		$comment->id_post = $post->id;
+		$comment = new invitado();
+		$comment->id_usuario = $text;
+		$comment->id_partido = $partido->id;
 		$comment->save();
 		$created[] = $comment->toArray();
 	}
