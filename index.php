@@ -351,7 +351,6 @@ $app->post('/partidos/:id/invitar', function () use ($app) {
 	}
 	$app->render(200,array('data' => $created));
 });
-});
 
 
 
