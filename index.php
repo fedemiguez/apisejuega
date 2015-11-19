@@ -400,6 +400,7 @@ $app->post('/partidos/:id/invitar', function ($id) use ($app) {
             'msg'   => 'partido not found',
         ));
 	}
+$input = $app->request->getBody();
 
 	
 	$id = $input['id_u'];
