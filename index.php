@@ -400,7 +400,12 @@ $app->post('/partidos/:id/invitar', function ($id) use ($app) {
             'msg'   => 'partido not found',
         ));
 	}
-	$input = $app->request->getBody();
+$input = $app->request->getBody();
+echo '<pre>';
+print_r($input);
+die();
+	
+/*
 	$id = $input['id_u'];
 	if(empty($id)){
 		$app->render(500,array(
@@ -408,6 +413,7 @@ $app->post('/partidos/:id/invitar', function ($id) use ($app) {
             'msg'   => 'id is required',
         ));
 	}
+
 	$text_array = explode(',', $id);
 	$created = array();
 	foreach ($text_array as $key => $id) {
@@ -418,6 +424,7 @@ $app->post('/partidos/:id/invitar', function ($id) use ($app) {
 		$created[] = $comment->toArray();
 	}
 	$app->render(200,array('data' => $created));
+	*/
 });
 
 
