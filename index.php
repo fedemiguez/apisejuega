@@ -437,9 +437,7 @@ $app->get('/partidos/:id', function ($id) use ($app) {
 });
 
 //ver Partidos de un id
-$app->get('/partidos/:id/invitados', function () use ($app) {
-
-
+$app->get('/invitados/:id', function ($id) use ($app) {
 
 		$partido = Partido::find($id);
 	if(empty($partido)){
