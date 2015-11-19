@@ -410,9 +410,9 @@ $app->post('/partidos/:id/invitar', function ($id) use ($app) {
         ));
 	}
 
-	foreach ($input['id_u'] as $key => $id) {
+	foreach ($id as list($a, $id_u)) {
 		$comment = new invitado();
-		$comment->id_usuario = $id;
+		$comment->id_usuario = $id_u;
 		$comment->id_partido = $partido->id;
 		$comment->save();
 		$created[] = $comment->toArray();
