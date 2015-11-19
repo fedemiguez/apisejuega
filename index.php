@@ -411,7 +411,7 @@ $input = $app->request->getBody();
         ));
 	}
 
-	foreach ($id as as $k => $value) {
+	foreach ($id as $k => $value) {
 		$comment = new invitado();
 		$comment->id_usuario = $value;
 		$comment->id_partido = $partido->id;
