@@ -447,10 +447,11 @@ $app->get('/invitados/:id', function ($id) use ($app) {
         ));
 	}
 
+	$users->user = User::find($users->id_usuario)-> get();
+	
 	$db = $app->db->getConnection();
 	$invitados = $db->table('invitados')->select('id_usuario', 'estado')->where('id_partido', $partido->id )->get();
 
-	$users->user = User::find($users->id_usuario)-> get();
 
 	$app->render(200,array('data' => $invitados, $users ));
 
