@@ -423,6 +423,54 @@ $input = $app->request->getBody();
 });
 
 
+//ver invitados
+
+$app->get('/partidos/:id', function ($id) use ($app) {
+	$user = Partido::find($id);
+	if(empty($user)){
+		$app->render(404,array(
+			'error' => TRUE,
+            'msg'   => 'user not found',
+        ));
+	}
+	$app->render(200,array('data' => $user->toArray()));
+});
+
+//ver Partidos de un id
+$app->get('/partidos/:id/invitados', function () use ($app) {
+
+
+		$token = $app->request->headers->get('auth-token');
+		if(empty($token)){
+			$app->render(500,array(
+				'error' => TRUE,
+				'msg'   => 'Not logged',
+			));
+		}
+		$id_user_token = simple_decrypt($token, $app->enc_key);
+		$user = User::find($id_user_token);
+		if(empty($user)){
+			$app->render(500,array(
+				'error' => TRUE,
+				'msg'   => 'Not logged',
+			));
+		}
+
+		$partido = Partido::find($id);
+	if(empty($partido)){
+		$app->render(404,array(
+			'error' => TRUE,
+            'msg'   => 'user not found',
+        ));
+	}
+
+	$db = $app->db->getConnection();
+	$users = $db->table('invitados')->select('id_usuario', 'estado')->where('id_partido', $partido->id )->get();
+
+	$app->render(200,array('data' => $users));
+});
+
+
 
 $app->run();
 ?>
