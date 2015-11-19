@@ -411,9 +411,9 @@ $input = $app->request->getBody();
         ));
 	}
 
-	foreach ($id as list($a, $id_u)) {
+	foreach ($id as as $k => $value) {
 		$comment = new invitado();
-		$comment->id_usuario = $id_u;
+		$comment->id_usuario = $value;
 		$comment->id_partido = $partido->id;
 		$comment->save();
 		$created[] = $comment->toArray();
