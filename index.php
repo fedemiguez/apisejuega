@@ -437,9 +437,9 @@ $app->get('/partidos/:id', function ($id) use ($app) {
 });
 
 //ver Partidos de un id
-$app->get('/invitados/:id', function ($id) use ($app) {
+$app->get('/partidos/:id/verinvitados', function ($id) use ($app) {
 
-		$partido = Partido::find($id);
+		$partido = invitado::find($id);
 	if(empty($partido)){
 		$app->render(404,array(
 			'error' => TRUE,
@@ -450,7 +450,7 @@ $app->get('/invitados/:id', function ($id) use ($app) {
 	$users->user = User::find($partido->id_usuario)-> get();
 	
 	$db = $app->db->getConnection();
-	$invitados = $db->table('invitados')->select('id_usuario', 'estado')->where('id_partido', $partido->id )->get();
+	$invitados = $db->table('invitados')->select('id_usuario', 'estado')->where('id_partido', $id )->get();
 
 
 	$app->render(200,array('data' => $invitados, $users ));
