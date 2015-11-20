@@ -423,36 +423,18 @@ $input = $app->request->getBody();
 });
 
 
-//ver invitados
-
-$app->get('/partidos/:id', function ($id) use ($app) {
-	$user = Partido::find($id);
-	if(empty($user)){
-		$app->render(404,array(
-			'error' => TRUE,
-            'msg'   => 'user not found',
-        ));
-	}
-	$app->render(200,array('data' => $user->toArray()));
-});
 
 //ver Partidos de un id
 $app->get('/partidos/:id/verinvitados', function ($id) use ($app) {
 
-		$partido = invitado::find($id);
-	if(empty($partido)){
-		$app->render(404,array(
-			'error' => TRUE,
-            'msg'   => 'user not found',
-        ));
-	}
+
 
 	
 	$db = $app->db->getConnection();
 	$invitados = $db->table('invitados')->select('id_usuario', 'estado')->where('id_partido', $id )->get();
 
 
-	$app->render(200,array('data' => $invitados, $users ));
+	$app->render(200,array('data' => $invitados ));
 
 });
 
