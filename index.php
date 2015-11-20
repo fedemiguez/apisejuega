@@ -433,8 +433,9 @@ $app->get('/partidos/:id/verinvitados', function ($id) use ($app) {
 	$db = $app->db->getConnection();
 	$invitados = $db->table('invitados')->select('id_usuario', 'estado')->where('id_partido', $id )->get();
 
+	$users=$db->table('users')->select('id_usuario', 'name')->where('id', $invitados['id_usuario'] )->get();
 
-	$app->render(200,array('data' => $invitados ));
+	$app->render(200,array('data' => $invitados, $users ));
 
 });
 
